@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+{% block maincontain %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+  <div class="mdc-card p-0">
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th style="text-align:center;">Name</th>
+            <th style="text-align:center;">Email</th>
+            <th style="text-align:center;">Join_date</th>
+            <th style="text-align:center;">Salary</th>
+            <th style="text-align:center;">Action</th>
+          </tr>
+        </thead>
+
+        {% for d in data %}
+        <tr>
+
+          <td style="text-align:center;">{{d.emp_name.emp_name|capfirst}}</td>
+          <td style="text-align:center;">{{d.emp_name.email}}</td>
+          <td style="text-align:center;">{{d.emp_name.join_date}}</td>
+          <td style="text-align:center;">{{d.salary}}</td>
+
+          <td style="text-align:center;">
+            <a class="btn btn-secondary" href="{% url 'salary_detail' d.id %}"><i class="fa fa-eye" style="font-size:23px"></i></a>&nbsp;&nbsp;
+
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock maincontain %}

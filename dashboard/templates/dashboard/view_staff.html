@@ -1,0 +1,95 @@
+{% extends 'dashboard/base.html' %}
+{% block maincontain %}
+<form action="{% url 'view_staff' %}" method="POST">
+  {% csrf_token %}
+  <div class="input-group">
+    <div class="form-outline" style="margin-left: 35%;margin-bottom: none;">
+      <input type="search" placeholder="search..." id="form1" name="search" class="form-control" />
+
+    </div>
+    <button type="submit" class="btn btn-primary" name='search_btn'>
+      <i class="fa fa-search" aria-hidden="true"></i>
+    </button>
+  </div>
+  </br></br>
+</form>
+
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+  <div class="mdc-card p-0">
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+
+            <th style="text-align:center;">Name</th>
+            <th style="text-align:center;">Phone Number</th>
+            <th style="text-align:center;">Aadhaar Number</th>
+            <th style="text-align:center;">Role</th>
+            <th style="text-align:center;">Join Date</th>
+  {% if perms.dashboard.add_staff %}
+            <th style="text-align:center;">Action</th>
+            {%endif%}
+          </tr>
+        </thead>
+
+        {% for d in data %}
+        <tr>
+
+          <td style="text-align:center;">{{d.staff_name|capfirst}}</td>
+          <td style="text-align:center;">{{d.phone_no}}</td>
+          <td style="text-align:center;">{{d.aadhar_no}}</td>
+          <td style="text-align:center;">{{d.role}}</td>
+          <td style="text-align:center;">{{d.join_date}}</td>
+  {% if perms.dashboard.add_staff %}
+          <td style="text-align:center;">
+            <button class="btn btn-primary" style="background-color:blue;width:40px;"><a href="{% url 'edit_staff' d.id  %}"><i class="fa fa-pencil-square-o" style="font-size:23px;text-align:center;color:white;"></i></a></button>
+            </a>&nbsp;&nbsp;
+            <button type="button" class="btn btn-danger" onclick="get_id({{d.id}})" data-toggle="modal" data-target="#example" style="width:40px;">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="example" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="examplemodel" style="font-weight:bold;color:black;margin-left:38%;font-size:20px;">Delete Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h5 style="font-weight:bold;color:#000;margin-left:21%;font-size:15px;"> Are you sure you want to Delete this</h5>
+                    <form action="{% url 'delete_staff' d.id %}" method='POST'>
+                      {% csrf_token %}
+                      <input type='hidden' name='id' id='id'>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</a></button>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+{%endif%}
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#myModal').on('shown.bs.modal', function() {
+    $('#myInput').trigger('focus')
+  })
+
+  function get_id(id) {
+    document.getElementById('id').value = id;
+  }
+</script>
+{% endblock maincontain %}
